@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import RatingUI from './components/rating';
 
-function App() {
+const App = () => {
+  const [rating, setRating] = useState(0);
+
+  const handleRatingChange = (newValue) => {
+    setRating(newValue);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Rating</h1>
+      <RatingUI value={rating} onChange={handleRatingChange} />
+      <p>Selected Rating: {rating}</p>
     </div>
   );
-}
+};
 
 export default App;
