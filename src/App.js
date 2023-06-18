@@ -3,6 +3,7 @@ import RatingUI from './components/rating';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 
 const theme = createTheme({
   palette: {
@@ -16,6 +17,8 @@ const App = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCommentSubmitted, setIsCommentSubmitted] = useState(false);
 
   const handleRatingChange = (newValue) => {
     setRating(newValue);
@@ -29,7 +32,13 @@ const App = () => {
     if (comment.trim() !== '') {
       setComments((prevComments) => [...prevComments, comment]);
       setComment('');
+      setIsDialogOpen(true);
+      setIsCommentSubmitted(true);
     }
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
   };
 
   return (
@@ -38,7 +47,6 @@ const App = () => {
       <div>
         <Box
           sx={{
-            
             display: 'flex',
             backgroundColor: '#C2F8E4',
             flexDirection: 'column',
@@ -63,11 +71,26 @@ const App = () => {
             rows={4}
             cols={50}
             placeholder="Add a comment..."
+            disabled={isCommentSubmitted}
           />
           <br />
-          <button onClick={handleSubmitComment}>Submit Comment</button>
+          <button onClick={handleSubmitComment} disabled={isCommentSubmitted}>
+            Submit Comment
+          </button>
         </Box>
       </div>
+
+      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Thanks for commenting</DialogTitle>
+        <DialogContent>
+          {/* Additional content can be added here if needed */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} autoFocus>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 };

@@ -1,25 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Rating from '@mui/material/Rating';
 import { styled } from '@mui/system';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 
-// Define custom styles using styled from @mui/system
 const StyledRating = styled(Rating)({
-  color: '#FFD700', // Set the color to a gold/yellow shade
-  fontSize: '2rem', // Increase the font size
-  // Add more custom styles here as needed
+  color: '#FFD700',
+  fontSize: '2rem',
 });
 
 const RatingUI = ({ value, onChange }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleRatingChange = (event, newValue) => {
+    onChange(newValue);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleFormSubmit = () => {
+    setIsDialogOpen(true);
+  };
+
   return (
-    
-    <StyledRating
-      
-      name="rating"
-      value={value}
-      onChange={(event, newValue) => {
-        onChange(newValue);
-      }}
-    />
+    <>
+      <StyledRating
+        name="rating"
+        value={value}
+        onChange={handleRatingChange}
+      />
+      <Button onClick={handleFormSubmit} variant="contained" color="primary">
+        Submit
+      </Button>
+      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Thanks for rating</DialogTitle>
+        <DialogContent>
+          {/* Additional content can be added here if needed */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} autoFocus>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
