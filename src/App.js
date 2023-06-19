@@ -58,7 +58,7 @@ const App = () => {
           <RatingUI value={rating} onChange={handleRatingChange} />
           <p>Selected Rating: {rating}</p>
 
-          <h2>Comments</h2>
+          {/* <h2>Comments</h2>
           <div>
             {comments.map((comment, index) => (
               <p key={index}>{comment}</p>
@@ -76,7 +76,7 @@ const App = () => {
           <br />
           <button onClick={handleSubmitComment} disabled={isCommentSubmitted}>
             Submit Comment
-          </button>
+          </button> */}
         </Box>
       </div>
 
