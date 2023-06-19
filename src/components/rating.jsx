@@ -1,20 +1,43 @@
-import React, { useState } from 'react';
-import Rating from '@mui/material/Rating';
-import { styled } from '@mui/system';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
-import moment from 'moment';
-
+import React, { useState } from "react";
+import Rating from "@mui/material/Rating";
+import { styled } from "@mui/system";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  ThemeProvider,
+  CssBaseline,
+  createTheme,
+} from "@mui/material";
+import moment from "moment";
+import Box from "@mui/material/Box";
 const StyledRating = styled(Rating)({
-  color: '#FFD700',
-  fontSize: '2rem',
+  color: "#FFD700",
+  fontSize: "2rem",
+});
+
+const theme = createTheme({
+  palette: {
+    background: {
+      default: "#C2F8E4", // Replace with your desired background color
+    },
+  },
 });
 
 const RatingUI = ({ value, onChange }) => {
+  const [rating, setRating] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
+  const [temp, setTemp] = useState(false);
 
-  const handleRatingChange = (event, newValue) => {
-    onChange(newValue);
+  const handleRatingChanging = (event) => {
+    setRating(event.target.value);
+  };
+
+  const handleRatingChange = (newValue) => {
+    setRating(newValue);
   };
 
   const handleDialogClose = () => {
@@ -34,64 +57,128 @@ const RatingUI = ({ value, onChange }) => {
       note: comment,
     };
 
-    fetch('http://localhost:8080/Rating/add', {
-      method: 'POST',
+    fetch("http://localhost:8080/Rating/add", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(newRating),
     })
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
-          console.log('Rating and comment saved successfully!');
-          setComment('');
+          console.log("Rating and comment saved successfully!");
+          setTemp(true);
+
+          setComment("");
           setIsDialogOpen(true);
         } else {
-          throw new Error('Error saving rating and comment');
+          throw new Error("Error saving rating and comment");
         }
       })
-      .catch(error => {
-        console.error('Error saving rating and comment:', error);
+      .catch((error) => {
+        console.error("Error saving rating and comment:", error);
       });
   };
 
-  const handleCommentChange = event => {
+  const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
 
   return (
     <>
-      <StyledRating name="rating" value={value} onChange={handleRatingChange} />
-      <br />
-      <br />
-      <h4>Add Comments:</h4>
-      <textarea
-        value={comment}
-        onChange={handleCommentChange}
-        rows={4}
-        cols={50}
-        placeholder="Add a comment..."
-      />
-      <br />
-      <br />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
 
-      <Button onClick={handleFormSubmit} variant="contained" color="primary">
-        Submit
-      </Button>
-      <br />
-      <br />
+        {temp ? (
+          <div>
+            {" "}
+            <Box
+              sx={{
+                display: "flex",
+                backgroundColor: "#C2F8E4",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "16px",
+              }}
+            >
+              <h1>
+                {" "}
+                Thanks for feedback
+                <br />
+                <button variant="contained" color="primary">
+                  click here to Dashboard
+                </button>
+              </h1>
+            </Box>
+          </div>
+        ) : (
+          <div>
+            <div>
+              <Box
+                sx={{
+                  display: "flex",
+                  backgroundColor: "#C2F8E4",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  padding: "16px",
+                }}
+              >
+                <h1>Rating</h1>
+                <p>Selected Rating: {rating}</p>
+              </Box>
+            </div>
+            <Box
+              sx={{
+                display: "flex",
+                backgroundColor: "#C2F8E4",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "16px",
+              }}
+            >
+              <StyledRating
+                name="rating"
+                value={value}
+                onChange={handleRatingChanging}
+              />
+              <br />
+              <br />
+              <h4>Add Comments:</h4>
+              <textarea
+                value={comment}
+                onChange={handleCommentChange}
+                rows={4}
+                cols={50}
+                placeholder="Add a comment..."
+              />
+              <br />
+              <br />
 
-      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Thanks for rating and comment</DialogTitle>
-        <DialogContent>
-          {/* Additional content can be added here if needed */}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
+              <Button
+                onClick={handleFormSubmit}
+                variant="contained"
+                color="primary"
+              >
+                Submit
+              </Button>
+              <br />
+              <br />
+
+              <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+                <DialogTitle>Thanks for rating and comment</DialogTitle>
+                <DialogContent>
+                  {/* Additional content can be added here if needed */}
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleDialogClose} autoFocus>
+                    Okay
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </Box>
+          </div>
+        )}
+      </ThemeProvider>
     </>
   );
 };
