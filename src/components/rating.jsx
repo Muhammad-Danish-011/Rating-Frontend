@@ -57,7 +57,7 @@ const RatingUI = ({ value, onChange }) => {
       note: comment,
     };
 
-    fetch("http://localhost:8080/Rating/add", {
+    fetch("http://ratingapp-env.eba-f5gxzjhm.us-east-1.elasticbeanstalk.com/rating/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -164,17 +164,15 @@ const RatingUI = ({ value, onChange }) => {
               <br />
               <br />
 
-              <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+              {/* <Dialog open={isDialogOpen} onClose={handleDialogClose}>
                 <DialogTitle>Thanks for rating and comment</DialogTitle>
-                <DialogContent>
-                  {/* Additional content can be added here if needed */}
-                </DialogContent>
+               
                 <DialogActions>
                   <Button onClick={handleDialogClose} autoFocus>
                     Okay
                   </Button>
                 </DialogActions>
-              </Dialog>
+              </Dialog> */}
             </Box>
           </div>
         )}
